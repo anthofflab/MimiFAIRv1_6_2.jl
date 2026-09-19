@@ -5,23 +5,23 @@
 # Note: Modified Etminan relationship from Meinshausen et al 2019 https://gmd.copernicus.org/preprints/gmd-2019-222/gmd-2019-222.pdf (Table 3)
 
 @defcomp co2_forcing begin
-    a₁           = Parameter()             # Carbon dioxide forcing coefficient.
-    b₁           = Parameter()             # Carbon dioxide forcing coefficient.
-    c₁           = Parameter()             # Carbon dioxide forcing coefficient.
-    d₁           = Parameter()             # Carbon dioxide forcing coefficient.
-    F2x          = Parameter()              # Radiative forcing from a doubling of CO₂ (W m⁻²).
-    N₂O_pi        = Parameter()             # Initial (pre-industrial) nitrous oxide concentration (ppb).
-    CO₂_pi        = Parameter()             # Initial (pre-industrial) carbon dioxide concentration (ppm).
-    adjust_F2x   = Parameter{Bool}()             # Boolean for whether or not to calculate a scaling scaling term to keep forcing from 2x CO₂ consistent.
+    a₁ = Parameter()             # Carbon dioxide forcing coefficient.
+    b₁ = Parameter()             # Carbon dioxide forcing coefficient.
+    c₁ = Parameter()             # Carbon dioxide forcing coefficient.
+    d₁ = Parameter()             # Carbon dioxide forcing coefficient.
+    F2x = Parameter()              # Radiative forcing from a doubling of CO₂ (W m⁻²).
+    N₂O_pi = Parameter()             # Initial (pre-industrial) nitrous oxide concentration (ppb).
+    CO₂_pi = Parameter()             # Initial (pre-industrial) carbon dioxide concentration (ppm).
+    adjust_F2x = Parameter{Bool}()             # Boolean for whether or not to calculate a scaling scaling term to keep forcing from 2x CO₂ consistent.
     #rf_scale_CO₂ = Parameter()             # Scaling factor to capture effective radiative forcing uncertainty.
-    N₂O          = Parameter(index=[time]) # Atmospheric nitrous oxide concentration (ppb).
-    CO₂          = Parameter(index=[time]) # Atmospheric carbon dioxide concentration (ppm).
+    N₂O = Parameter(index=[time]) # Atmospheric nitrous oxide concentration (ppb).
+    CO₂ = Parameter(index=[time]) # Atmospheric carbon dioxide concentration (ppm).
 
-    F2x_scale    = Variable()             # Radiative forcing scaling term (to keep forcing from 2x CO₂ consistent).
-    CO₂_α        = Variable(index=[time])  # Radiative forcing scaling coefficient.
-    N₂O_α        = Variable(index=[time])  # Radiative forcing scaling coefficient.
-    CO₂_α_max        = Variable() # Concentration value where forcing coefficient scaling term reaches its maximum value (ppm).
-    rf_co2       = Variable(index=[time])  # Forcing from atmospheric carbon dioxide concentrations (Wm⁻²).
+    F2x_scale = Variable()             # Radiative forcing scaling term (to keep forcing from 2x CO₂ consistent).
+    CO₂_α = Variable(index=[time])  # Radiative forcing scaling coefficient.
+    N₂O_α = Variable(index=[time])  # Radiative forcing scaling coefficient.
+    CO₂_α_max = Variable() # Concentration value where forcing coefficient scaling term reaches its maximum value (ppm).
+    rf_co2 = Variable(index=[time])  # Forcing from atmospheric carbon dioxide concentrations (Wm⁻²).
 
 
     # Calculate some values required for CO₂ radiative forcing calculations.
@@ -51,7 +51,7 @@
         # Calculate scaling term depending on whether or not CO₂ concentrations are between pre-industrial and maximum values for α.
         if p.CO₂_pi < p.CO₂[t] <= v.CO₂_α_max
             # α when concentrations are between pre-industrial and maximum.
-            v.CO₂_α[t] = p.d₁ + p.a₁ * (p.CO₂[t] - p.CO₂_pi) ^ 2 + p.b₁ * (p.CO₂[t] - p.CO₂_pi)
+            v.CO₂_α[t] = p.d₁ + p.a₁ * (p.CO₂[t] - p.CO₂_pi)^2 + p.b₁ * (p.CO₂[t] - p.CO₂_pi)
 
         elseif p.CO₂[t] <= p.CO₂_pi
             # α when concentrations are less than pre-industrial.

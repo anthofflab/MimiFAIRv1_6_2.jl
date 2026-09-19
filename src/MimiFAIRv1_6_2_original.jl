@@ -4,7 +4,7 @@ using CSVFiles, DataFrames, Mimi
 
 # This is the version of MimiFAIRv1_6_2 that will match the Python version and 
 # can be used for testing.
-function get_model_original(;rcp_scenario::String="RCP85", start_year::Int=1765, end_year::Int=2500)
+function get_model_original(; rcp_scenario::String="RCP85", start_year::Int=1765, end_year::Int=2500)
 
     # ---------------------------------------------
     # Set Up Data and Parameter Values
@@ -15,7 +15,7 @@ function get_model_original(;rcp_scenario::String="RCP85", start_year::Int=1765,
 
     # Names of minor greenhouse gases and ozone-depleting substances (used or indexing).
     other_ghg_names = ["CF4", "C2F6", "C6F14", "HFC23", "HFC32", "HFC43_10", "HFC125", "HFC134a", "HFC143a", "HFC227ea", "HFC245fa", "SF6"]
-    ods_names       = ["CFC_11", "CFC_12", "CFC_113", "CFC_114", "CFC_115", "CARB_TET", "MCF", "HCFC_22", "HCFC_141B", "HCFC_142B", "HALON1211", "HALON1202", "HALON1301", "HALON2402", "CH3BR", "CH3CL"]
+    ods_names = ["CFC_11", "CFC_12", "CFC_113", "CFC_114", "CFC_115", "CARB_TET", "MCF", "HCFC_22", "HCFC_141B", "HCFC_142B", "HALON1211", "HALON1202", "HALON1301", "HALON2402", "CH3BR", "CH3CL"]
 
     # ---------------------------------------------
     # Initialize Mimi model.
@@ -56,13 +56,13 @@ function get_model_original(;rcp_scenario::String="RCP85", start_year::Int=1765,
     # ---------------------------------------------
 
     # ---- Carbon Cycle ---- #
-    set_param!(m, :co2_cycle, :CO₂_0,  278.052989189439) # From FAIR model run.
-    set_param!(m, :co2_cycle, :iirf_h,  100.0)
+    set_param!(m, :co2_cycle, :CO₂_0, 278.052989189439) # From FAIR model run.
+    set_param!(m, :co2_cycle, :iirf_h, 100.0)
     set_param!(m, :co2_cycle, :r0_co2, 35.0)
     set_param!(m, :co2_cycle, :rT_co2, 4.165)
-    set_param!(m, :co2_cycle, :rC_co2,  0.019)
+    set_param!(m, :co2_cycle, :rC_co2, 0.019)
     set_param!(m, :co2_cycle, :τ_co2, [1000000, 394.4, 36.54, 4.304])
-    set_param!(m, :co2_cycle, :a_co2, [0.2173,0.2240,0.2824,0.2763])
+    set_param!(m, :co2_cycle, :a_co2, [0.2173, 0.2240, 0.2824, 0.2763])
     set_param!(m, :co2_cycle, :R0_co2, [0.0003062168651584551, 0.0003156584344017209, 0.0003979550976564552, 0.0003893590420767655]) # From FAIR model run.
     set_param!(m, :co2_cycle, :E_co2, rcp_emissions.FossilCO2 .+ rcp_emissions.OtherCO2)
     set_param!(m, :co2_cycle, :cumulative_emissions_CO2₀, 0.003)
@@ -76,27 +76,27 @@ function get_model_original(;rcp_scenario::String="RCP85", start_year::Int=1765,
     set_param!(m, :ch4_cycle, :τ_CH₄, 9.3)
     set_param!(m, :ch4_cycle, :fossil_frac, gas_fractions.ch4_fossil)
     set_param!(m, :ch4_cycle, :oxidation_frac, 0.61)
-    set_param!(m, :ch4_cycle, :mol_weight_CH₄, gas_data[gas_data.gas .== "CH4", :mol_weight][1])
-    set_param!(m, :ch4_cycle, :mol_weight_C, gas_data[gas_data.gas .== "C", :mol_weight][1])
-    set_param!(m, :ch4_cycle, :emiss2conc_ch4, conversions[conversions.gases .== "CH4", :emiss2conc][1])
-    set_param!(m, :ch4_cycle, :CH₄_0, gas_data[gas_data.gas .== "CH4", :pi_conc_ar6][1])
+    set_param!(m, :ch4_cycle, :mol_weight_CH₄, gas_data[gas_data.gas.=="CH4", :mol_weight][1])
+    set_param!(m, :ch4_cycle, :mol_weight_C, gas_data[gas_data.gas.=="C", :mol_weight][1])
+    set_param!(m, :ch4_cycle, :emiss2conc_ch4, conversions[conversions.gases.=="CH4", :emiss2conc][1])
+    set_param!(m, :ch4_cycle, :CH₄_0, gas_data[gas_data.gas.=="CH4", :pi_conc_ar6][1])
 
     # ---- Nitrous Oxide Cycle ---- #
     set_param!(m, :n2o_cycle, :fossil_emiss_N₂O, rcp_emissions.N2O)
     set_param!(m, :n2o_cycle, :natural_emiss_N₂O, rcp_emissions.NaturalN2O)
     set_param!(m, :n2o_cycle, :τ_N₂O, 121.0)
-    set_param!(m, :n2o_cycle, :emiss2conc_n2o, conversions[conversions.gases .== "N2O", :emiss2conc][1])
-    set_param!(m, :n2o_cycle, :N₂O_0, gas_data[gas_data.gas .== "N2O", :pi_conc_ar6][1])
+    set_param!(m, :n2o_cycle, :emiss2conc_n2o, conversions[conversions.gases.=="N2O", :emiss2conc][1])
+    set_param!(m, :n2o_cycle, :N₂O_0, gas_data[gas_data.gas.=="N2O", :pi_conc_ar6][1])
 
     # ---- Other Well-Mixed Greenhouse Gas Cycles ---- #
     set_param!(m, :other_ghg_cycles, :τ_other_ghg, gas_data[indexin(other_ghg_names, gas_data.gas), :lifetimes])
-    set_param!(m, :other_ghg_cycles, :emiss_other_ghg, Matrix(rcp_emissions[!,Symbol.(other_ghg_names)]))
+    set_param!(m, :other_ghg_cycles, :emiss_other_ghg, Matrix(rcp_emissions[!, Symbol.(other_ghg_names)]))
     set_param!(m, :other_ghg_cycles, :emiss2conc_other_ghg, conversions[indexin(other_ghg_names, conversions.gases), :emiss2conc])
     set_param!(m, :other_ghg_cycles, :other_ghg_0, gas_data[indexin(other_ghg_names, gas_data.gas), :pi_conc_ar6])
 
     # ---- Ozone-Depleting Substance Gas Cycles ---- #
     set_param!(m, :o3_depleting_substance_cycles, :τ_ods, gas_data[indexin(ods_names, gas_data.gas), :lifetimes])
-    set_param!(m, :o3_depleting_substance_cycles, :emiss_ods, Matrix(rcp_emissions[!,Symbol.(ods_names)]))
+    set_param!(m, :o3_depleting_substance_cycles, :emiss_ods, Matrix(rcp_emissions[!, Symbol.(ods_names)]))
     set_param!(m, :o3_depleting_substance_cycles, :emiss2conc_ods, conversions[indexin(ods_names, conversions.gases), :emiss2conc])
     set_param!(m, :o3_depleting_substance_cycles, :ods_0, gas_data[indexin(ods_names, gas_data.gas), :pi_conc_ar6])
 
@@ -120,7 +120,7 @@ function get_model_original(;rcp_scenario::String="RCP85", start_year::Int=1765,
 
     # ---- Nitrous Oxide Radiative Forcing ---- #
     set_param!(m, :n2o_forcing, :a₂, -0.00034197)
-    set_param!(m, :n2o_forcing, :b₂,  0.00025455)
+    set_param!(m, :n2o_forcing, :b₂, 0.00025455)
     set_param!(m, :n2o_forcing, :c₂, -0.00024357)
     set_param!(m, :n2o_forcing, :d₂, 0.12173)
     connect_param!(m, :n2o_forcing => :CO₂, :co2_cycle => :co2)
@@ -172,15 +172,15 @@ function get_model_original(;rcp_scenario::String="RCP85", start_year::Int=1765,
     set_param!(m, :contrails_forcing, :E_ref_contrails, 2.946)
     set_param!(m, :contrails_forcing, :F_ref_contrails, 0.0448)
     set_param!(m, :contrails_forcing, :ref_is_NO2, true)
-    set_param!(m, :contrails_forcing, :mol_weight_NO₂, gas_data[gas_data.gas .== "NO2", :mol_weight][1])
-    set_param!(m, :contrails_forcing, :mol_weight_N, gas_data[gas_data.gas .== "N", :mol_weight][1])
+    set_param!(m, :contrails_forcing, :mol_weight_NO₂, gas_data[gas_data.gas.=="NO2", :mol_weight][1])
+    set_param!(m, :contrails_forcing, :mol_weight_N, gas_data[gas_data.gas.=="N", :mol_weight][1])
 
     # ---- Black Carbon on Snow Radiative Forcing ---- #
     set_param!(m, :bc_snow_forcing, :E_ref_bc, 6.095)
     set_param!(m, :bc_snow_forcing, :F_ref_bc, 0.08)
 
     # ---- Land Use Change Radiative Forcing ---- #
-    set_param!(m, :landuse_forcing, :α_CO₂_land, (-0.2/190))
+    set_param!(m, :landuse_forcing, :α_CO₂_land, (-0.2 / 190))
     set_param!(m, :landuse_forcing, :landuse_emiss, rcp_emissions.OtherCO2)
 
     # ---- Total Radiative Forcing ---- #
@@ -226,21 +226,21 @@ function get_model_original(;rcp_scenario::String="RCP85", start_year::Int=1765,
 
     # ---- Temperature ---- #
     set_param!(m, :temperature, :earth_radius, 6371000)
-    set_param!(m, :temperature, :seconds_per_year, (60*60*24*365.24219))
+    set_param!(m, :temperature, :seconds_per_year, (60 * 60 * 24 * 365.24219))
     set_param!(m, :temperature, :ocean_heat_exchange, 0.67)
     set_param!(m, :temperature, :deep_ocean_efficacy, 1.28)
     set_param!(m, :temperature, :lambda_global, 1.18)
     set_param!(m, :temperature, :T_mix₀, [5.30299681e-03, 6.41290105e-05]) # From Python-FAIR model run.
-    set_param!(m, :temperature, :T_deep₀, [-1.33065374e-04,  1.50206328e-04]) # From Python-FAIR model run.
+    set_param!(m, :temperature, :T_deep₀, [-1.33065374e-04, 1.50206328e-04]) # From Python-FAIR model run.
     set_param!(m, :temperature, :ocean_heat_capacity, [8.2, 109.0])
     connect_param!(m, :temperature => :forcing, :total_forcing => :total_forcing)
 
     # ---- Parameters Shared Across Multiple Components ---- #
     set_param!(m, :dt, 1.0)
-    set_param!(m, :emiss2conc_co2, conversions[conversions.gases .== "CO2", :emiss2conc][1])
-    set_param!(m, :CH₄_pi, gas_data[gas_data.gas .== "CH4", :pi_conc_ar6][1])
-    set_param!(m, :CO₂_pi, gas_data[gas_data.gas .== "CO2", :pi_conc_ar6][1])
-    set_param!(m, :N₂O_pi, gas_data[gas_data.gas .== "N2O", :pi_conc_ar6][1])
+    set_param!(m, :emiss2conc_co2, conversions[conversions.gases.=="CO2", :emiss2conc][1])
+    set_param!(m, :CH₄_pi, gas_data[gas_data.gas.=="CH4", :pi_conc_ar6][1])
+    set_param!(m, :CO₂_pi, gas_data[gas_data.gas.=="CO2", :pi_conc_ar6][1])
+    set_param!(m, :N₂O_pi, gas_data[gas_data.gas.=="N2O", :pi_conc_ar6][1])
     set_param!(m, :ods_pi, gas_data[indexin(ods_names, gas_data.gas), :pi_conc_ar6])
     set_param!(m, :other_ghg_pi, gas_data[indexin(other_ghg_names, gas_data.gas), :pi_conc_ar6])
     set_param!(m, :SOx_emiss, rcp_emissions.SOx)
@@ -250,12 +250,12 @@ function get_model_original(;rcp_scenario::String="RCP85", start_year::Int=1765,
     set_param!(m, :NMVOC_emiss, rcp_emissions.NMVOC)
     set_param!(m, :NH3_emiss, rcp_emissions.NH3)
     set_param!(m, :NOx_emiss, rcp_emissions.NOx)
-    set_param!(m, :SOx_emiss_pi,   0.0)
-    set_param!(m, :CO_emiss_pi,    0.0)
+    set_param!(m, :SOx_emiss_pi, 0.0)
+    set_param!(m, :CO_emiss_pi, 0.0)
     set_param!(m, :NMVOC_emiss_pi, 0.0)
-    set_param!(m, :NOx_emiss_pi,   0.0)
-    set_param!(m, :BC_emiss_pi,    0.0)
-    set_param!(m, :OC_emiss_pi,    0.0)
+    set_param!(m, :NOx_emiss_pi, 0.0)
+    set_param!(m, :BC_emiss_pi, 0.0)
+    set_param!(m, :OC_emiss_pi, 0.0)
 
     # Return model
     return m

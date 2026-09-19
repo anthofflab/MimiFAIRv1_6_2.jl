@@ -6,20 +6,20 @@
 
 @defcomp aerosol_indirect_forcing begin
 
-    ϕ                      = Parameter()             # Scale factor.
-    b_SOx                  = Parameter()             # Sensitivity to sulfur oxides emissions.
-    b_POM                  = Parameter()             # Sensitivity to black carbon + organic carbon emissions.
-    SOx_emiss_pi           = Parameter()             # Pre-industiral sulfur oxides emissions (Mt yr⁻¹).
-    BC_emiss_pi            = Parameter()             # Pre-industiral black carbon emissions (Mt yr⁻¹).
-    OC_emiss_pi            = Parameter()             # Pre-industrial organic carbon emissions (Mt yr⁻¹).
+    ϕ = Parameter()             # Scale factor.
+    b_SOx = Parameter()             # Sensitivity to sulfur oxides emissions.
+    b_POM = Parameter()             # Sensitivity to black carbon + organic carbon emissions.
+    SOx_emiss_pi = Parameter()             # Pre-industiral sulfur oxides emissions (Mt yr⁻¹).
+    BC_emiss_pi = Parameter()             # Pre-industiral black carbon emissions (Mt yr⁻¹).
+    OC_emiss_pi = Parameter()             # Pre-industrial organic carbon emissions (Mt yr⁻¹).
     rf_scale_aero_indirect = Parameter()             # Scaling factor to capture effective radiative forcing uncertainty.
-    SOx_emiss              = Parameter(index=[time]) # Sulfur oxides emissions (MtS yr⁻¹).
-    BC_emiss               = Parameter(index=[time]) # Black carbon emissions (Mt yr⁻¹).
-    OC_emiss               = Parameter(index=[time]) # Organic carbon emissions (Mt yr⁻¹).
+    SOx_emiss = Parameter(index=[time]) # Sulfur oxides emissions (MtS yr⁻¹).
+    BC_emiss = Parameter(index=[time]) # Black carbon emissions (Mt yr⁻¹).
+    OC_emiss = Parameter(index=[time]) # Organic carbon emissions (Mt yr⁻¹).
 
-    pd_re       = Variable(index=[time])  # Present-day indirect radiative forcing cntribution from aerosols (Wm⁻²).
-    pi_re       = Variable(index=[time])  # Pr-industrial indirect radiative forcing contribution from aerosols (Wm⁻²).
-    rf_aero_indirect       = Variable(index=[time])  # Indirect radiative forcing from aerosols (Wm⁻²).
+    pd_re = Variable(index=[time])  # Present-day indirect radiative forcing cntribution from aerosols (Wm⁻²).
+    pi_re = Variable(index=[time])  # Pr-industrial indirect radiative forcing contribution from aerosols (Wm⁻²).
+    rf_aero_indirect = Variable(index=[time])  # Indirect radiative forcing from aerosols (Wm⁻²).
 
 
     function run_timestep(p, v, d, t)
