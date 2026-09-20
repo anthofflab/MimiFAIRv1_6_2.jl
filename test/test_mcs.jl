@@ -4,12 +4,16 @@
     using CSVFiles
     using DataFrames
 
-    # run_mcs needs at least two trials because of a Mimi SampleStore restriction
+    # run_mcs needs at least two trials because of a Mimi SampleStore restriction.
+    # `trials` is typed `Integer` rather than `Int64` so that this reaches the
+    # check rather than a TypeError on 32-bit platforms, where a literal is Int32.
     @test_throws ErrorException MimiFAIRv1_6_2.run_mcs(trials = 1)
+    @test_throws ErrorException MimiFAIRv1_6_2.run_mcs(trials = Int32(1))
+    @test_throws ErrorException MimiFAIRv1_6_2.run_mcs(trials = Int64(1))
 
     mktempdir() do output_dir
 
-        results = MimiFAIRv1_6_2.run_mcs(trials = 3, output_dir = output_dir, save_trials = true)
+        results = MimiFAIRv1_6_2.run_mcs(trials = Int32(3), output_dir = output_dir, save_trials = true)
 
         @test results isa Mimi.MonteCarloSimulationInstance
 

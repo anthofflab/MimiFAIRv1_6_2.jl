@@ -2,7 +2,7 @@ using Distributions, Dates, Mimi, CSVFiles, DataFrames
 import Mimi: SampleStore, add_RV!, add_transform!
 
 """
-    run_mcs(;trials::Int64 = 2237, 
+    run_mcs(;trials::Integer = 2237,
         output_dir::Union{String, Nothing} = nothing, 
         save_trials::Bool = false,
         m::Mimi.Model = get_model())
@@ -12,7 +12,7 @@ and save data into the `output_dir` folder, optionally also saving trials if
 `save_trials` is set to `true.` If no model is provided, use the default model 
 returned by get_model().
 """
-function run_mcs(;trials::Int64 = 2237, 
+function run_mcs(;trials::Integer = 2237,
                     output_dir::Union{String, Nothing} = nothing, 
                     save_trials::Bool = false,
                     m::Mimi.Model = get_model())
@@ -28,8 +28,10 @@ function run_mcs(;trials::Int64 = 2237,
     # Get an instance of the mcs
     mcs = get_mcs()
 
-    # run monte carlo trials
-    results = run(mcs, m, trials; trials_output_filename = trials_output_filename, results_output_dir = "$output_dir/results")
+    # run monte carlo trials, converting to Int64 because that is what Mimi's
+    # run method for a SimulationDef takes. On a 32-bit platform an integer
+    # literal is an Int32, so without this a caller could not pass one at all.
+    results = run(mcs, m, Int64(trials); trials_output_filename = trials_output_filename, results_output_dir = "$output_dir/results")
 
     return results
 end
